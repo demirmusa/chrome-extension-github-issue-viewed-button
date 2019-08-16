@@ -1,0 +1,14 @@
+{
+  "manifest_version": 2,
+
+  "name": "Github Issue ",
+  "version": "0.1.0",
+  "description": "Close Issue",
+
+  "content_scripts": [{
+    "css": ["styles.css"],
+    "js": ["content.js"],
+    "matches": ["https://github.com/issues"]
+  }]
+
+}
