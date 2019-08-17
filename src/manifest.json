@@ -1,17 +1,29 @@
 {
     "manifest_version": 2,
-
-    "name": "Github Issue ",
+    "name": "Github Issue/PR Viewed Button",
     "version": "0.1.0",
-    "description": "Close Issue",
-    "permissions": ["tabs", "storage"],
+    "description": "It adds viewed button to issue and pull request pages on github",
+    "permissions": [
+        "tabs",
+        "storage",
+        "<all_urls>",
+        "contextMenus"
+    ],
     "content_scripts": [{
-        "css": ["styles.css"],
-        "js": ["content.js"],
-        "matches": ["https://github.com/issues*", "https://github.com/issues/*", "https://github.com/*/*/issues**"]
+        "css": [
+            "styles.css"
+        ],
+        "js": [
+            "content.js"
+        ],
+        "matches": [
+            "<all_urls>"
+        ]
     }],
     "background": {
-        "scripts": ["background.js"]
+        "scripts": [
+            "background.js",
+            "contextMenu.js"
+        ]
     }
-
 }

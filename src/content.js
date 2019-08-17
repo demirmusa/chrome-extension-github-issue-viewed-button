@@ -1,8 +1,8 @@
 const localStorageKey = "GithubViewedIssueIds";
+rowIdSuffix = "";
 
 function initalize() {
     getFromStorage(function(list) {
-        debugger;
         var jsIssueRows = document.querySelectorAll(".js-issue-row");
         if (jsIssueRows) {
             for (var i = 0, l = jsIssueRows.length; i < l; i++) {
@@ -34,7 +34,7 @@ function GetTemplateHtml(parentId, viewed) {
 }
 
 function issueViewedCheckboxOnChange(e) {
-    debugger;
+
     var id = e.target.dataset.parentid;
     var boxRow = document.getElementById(id);
     if (boxRow) {
@@ -75,11 +75,6 @@ function bindOnChangeEvents() {
     }
 }
 
-function getOverlay() {
-    return `<div class="overlay-row-github-issue-viewed"></div>`;
-}
-
-
 function htmlToElement(html) {
     var template = document.createElement('template');
     html = html.trim(); // Never return a text node of whitespace as the result
@@ -87,10 +82,14 @@ function htmlToElement(html) {
     return template.content.firstChild;
 }
 
+function getOverlay() {
+    return `<div class="overlay-row-github-issue-viewed"></div>`;
+}
 
 function addToStorage(id) {
+    id += rowIdSuffix;
     getFromStorage(function(list) {
-        debugger;
+
         if (!list) {
             list = [];
         }
@@ -102,8 +101,9 @@ function addToStorage(id) {
 }
 
 function removeFromStorage(id) {
+    id += rowIdSuffix;
     getFromStorage(function(list) {
-        debugger;
+
         if (list && list.indexOf(id) != -1) {
             list.splice(list.indexOf(id), 1);
             setStorage(list);
@@ -114,15 +114,14 @@ function removeFromStorage(id) {
 function setStorage(list) {
     var jsonfile = {};
     jsonfile[localStorageKey] = JSON.stringify(list);
-    debugger;
+
     chrome.storage.sync.set(jsonfile, function() {
-        debugger;
+
     });
 }
 
 function getFromStorage(callBack) {
     chrome.storage.sync.get([localStorageKey], function(result) {
-        debugger;
         if (typeof result[localStorageKey] != "undefined")
             callBack(JSON.parse(result[localStorageKey]));
         else
@@ -130,18 +129,14 @@ function getFromStorage(callBack) {
     });
 }
 
-initalize();
-
-function test() {
-    console.log("test");
-}
-
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         // listen for messages sent from background.js
-        if (request.message === 'TabUrlChanged') {
+        if (request.message === 'UrlChanged_ReInitializeIssueViewed') {
+            setTimeout(function() { initalize(); }, 1500);
+            console.log("InitializeGithubViewed", request);
             debugger;
-            console.log(request.url) // new url is now in content scripts!
-            setTimeout(function() { initalize(); }, 2000);
+        } else if (request.message === "ConsoleLogMe") {
+            console.log(request);
         }
     });
