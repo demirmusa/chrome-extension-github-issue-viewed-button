@@ -6,6 +6,9 @@ function initalize() {
         var jsIssueRows = document.querySelectorAll(".js-issue-row");
         if (jsIssueRows) {
             for (var i = 0, l = jsIssueRows.length; i < l; i++) {
+                var btn = jsIssueRows[i].querySelector(".btn-github-issue-viewed");
+                if (btn) continue; //if its already added continue
+
                 var id = jsIssueRows[i].id;
                 var table = jsIssueRows[i].querySelector(".d-table");
 
@@ -34,7 +37,6 @@ function GetTemplateHtml(parentId, viewed) {
 }
 
 function issueViewedCheckboxOnChange(e) {
-
     var id = e.target.dataset.parentid;
     var boxRow = document.getElementById(id);
     if (boxRow) {
