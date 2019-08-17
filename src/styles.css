@@ -1,0 +1,20 @@
+.btn-github-issue-viewed {
+    cursor: pointer !important;
+    position: absolute;
+    top: 0px;
+    right: -78px;
+    background-color: white
+}
+
+.overlay-row-github-issue-viewed {
+    width: 100%;
+    height: 100%;
+    background-color: whitesmoke;
+    opacity: .9;
+    z-index: 9;
+    position: absolute;
+}
+
+.tableRow-disabled {
+    height: 30px !important;
+}

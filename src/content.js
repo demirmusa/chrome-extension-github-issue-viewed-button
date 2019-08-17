@@ -1,43 +1,147 @@
-debugger;
-var issueToolbar = document.getElementById('js-issues-toolbar');
-var container = issueToolbar.querySelector(".js-navigation-container");
-var boxRows = container.querySelectorAll(".Box-row");
+const localStorageKey = "GithubViewedIssueIds";
 
+function initalize() {
+    getFromStorage(function(list) {
+        debugger;
+        var jsIssueRows = document.querySelectorAll(".js-issue-row");
+        if (jsIssueRows) {
+            for (var i = 0, l = jsIssueRows.length; i < l; i++) {
+                var id = jsIssueRows[i].id;
+                var table = jsIssueRows[i].querySelector(".d-table");
 
-for (var i = 0, l = boxRows.length; i < l; i++) {
-  debugger;
-  var table = boxRows[i].querySelectorAll(".d-table");
-  table[0].appendChild(htmlToElement(GetTemplateHtml()))
+                if (list && list.indexOf(id) != -1) {
+                    disableTable(table);
+                    table.appendChild(htmlToElement(GetTemplateHtml(id, true)))
+                } else {
+                    table.appendChild(htmlToElement(GetTemplateHtml(id, false)))
+                }
+            }
+            bindOnChangeEvents();
+        }
+    });
 }
+
+function GetTemplateHtml(parentId, viewed) {
+    if (viewed) {
+        return `
+        <label class="js-reviewed-toggle ml-2 mr-1 px-2 py-1 rounded-1 f6 text-normal d-flex flex-items-center border text-gray border-gray-dark btn-github-issue-viewed bg-blue-2" >
+        <input class="mr-1 js-reviewed-checkbox checkbox-github-issue-viewed" type="checkbox" checked="checked" data-parentId="` + parentId + `"/>Viewed</label>`;
+    } else {
+        return `
+        <label class="js-reviewed-toggle ml-2 mr-1 px-2 py-1 rounded-1 f6 text-normal d-flex flex-items-center border text-gray border-gray-dark btn-github-issue-viewed" >
+        <input class="mr-1 js-reviewed-checkbox checkbox-github-issue-viewed" type="checkbox" data-parentId="` + parentId + `"/>Viewed</label>`;
+    }
+}
+
+function issueViewedCheckboxOnChange(e) {
+    debugger;
+    var id = e.target.dataset.parentid;
+    var boxRow = document.getElementById(id);
+    if (boxRow) {
+        var table = boxRow.querySelector(".d-table");
+        if (table) {
+            if (e.target.checked) {
+                e.target.parentNode.classList.add("bg-blue-2");
+                disableTable(table);
+                addToStorage(id)
+            } else {
+                e.target.parentNode.classList.remove("bg-blue-2");
+
+                table.classList.remove("tableRow-disabled");
+
+                var overlayDivs = table.querySelectorAll(".overlay-row-github-issue-viewed");
+                if (overlayDivs && overlayDivs.length > 0) {
+                    overlayDivs.forEach(overlayDiv => {
+                        table.removeChild(overlayDiv);
+                    });
+                }
+                removeFromStorage(id);
+            }
+        }
+    }
+}
+
+function disableTable(tableElement) {
+    tableElement.classList.add("tableRow-disabled");
+    tableElement.insertBefore(htmlToElement(getOverlay()), tableElement.childNodes[0]);
+}
+
+function bindOnChangeEvents() {
+    var checboxes = document.querySelectorAll(".checkbox-github-issue-viewed");
+    if (checboxes && checboxes.length > 0) {
+        checboxes.forEach(checkbox => {
+            checkbox.addEventListener("change", issueViewedCheckboxOnChange);
+        });
+    }
+}
+
+function getOverlay() {
+    return `<div class="overlay-row-github-issue-viewed"></div>`;
+}
+
 
 function htmlToElement(html) {
-  var template = document.createElement('template');
-  html = html.trim(); // Never return a text node of whitespace as the result
-  template.innerHTML = html;
-  return template.content.firstChild;
+    var template = document.createElement('template');
+    html = html.trim(); // Never return a text node of whitespace as the result
+    template.innerHTML = html;
+    return template.content.firstChild;
 }
-function GetTemplateHtml(){
-  return `
-<div style="
-    position: absolute;
-    width: 100%;
-    height: 100%;
-">
-<div style="
-    width: 100%;
-    height: 100%;
-    /* position: absolute; */
-    background-color: whitesmoke;
-    opacity: .9;
-    z-index: 1000002;
-">
-    </div>
-<button class="octicon octicon-comment v-align-middle" style="
-    position: absolute;
-    top: 0;
-    left: -77px;
-">Open/Close</button>
 
-</div>
-`;
+
+function addToStorage(id) {
+    getFromStorage(function(list) {
+        debugger;
+        if (!list) {
+            list = [];
+        }
+        if (list.indexOf(id) == -1) { //not exist
+            list.push(id);
+            setStorage(list);
+        }
+    });
 }
+
+function removeFromStorage(id) {
+    getFromStorage(function(list) {
+        debugger;
+        if (list && list.indexOf(id) != -1) {
+            list.splice(list.indexOf(id), 1);
+            setStorage(list);
+        }
+    });
+}
+
+function setStorage(list) {
+    var jsonfile = {};
+    jsonfile[localStorageKey] = JSON.stringify(list);
+    debugger;
+    chrome.storage.sync.set(jsonfile, function() {
+        debugger;
+    });
+}
+
+function getFromStorage(callBack) {
+    chrome.storage.sync.get([localStorageKey], function(result) {
+        debugger;
+        if (typeof result[localStorageKey] != "undefined")
+            callBack(JSON.parse(result[localStorageKey]));
+        else
+            callBack(null);
+    });
+}
+
+initalize();
+
+function test() {
+    console.log("test");
+}
+
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        // listen for messages sent from background.js
+        if (request.message === 'TabUrlChanged') {
+            debugger;
+            console.log(request.url) // new url is now in content scripts!
+            setTimeout(function() { initalize(); }, 2000);
+        }
+    });
