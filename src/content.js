@@ -47,8 +47,6 @@ function issueViewedCheckboxOnChange(e) {
             } else {
                 e.target.parentNode.classList.remove("bg-blue-2");
 
-                table.classList.remove("tableRow-disabled");
-
                 var overlayDivs = table.querySelectorAll(".overlay-row-github-issue-viewed");
                 if (overlayDivs && overlayDivs.length > 0) {
                     overlayDivs.forEach(overlayDiv => {
@@ -62,7 +60,6 @@ function issueViewedCheckboxOnChange(e) {
 }
 
 function disableTable(tableElement) {
-    tableElement.classList.add("tableRow-disabled");
     tableElement.insertBefore(htmlToElement(getOverlay()), tableElement.childNodes[0]);
 }
 

@@ -14,7 +14,3 @@
     z-index: 9;
     position: absolute;
 }
-
-.tableRow-disabled {
-    height: 30px !important;
-}
