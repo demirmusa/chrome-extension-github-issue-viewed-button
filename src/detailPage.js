@@ -1,18 +1,15 @@
 chrome.runtime.onMessage.addListener(
-    function (request, sender, sendResponse) {
+    function(request, sender, sendResponse) {
         // listen for messages sent from background.js
         if (request.message === 'UrlChanged_ReInitializeIssueViewed_DetailPage') {
             rowIdSuffix = request.rowIdSuffix;
-            setTimeout(function () { initalizeDetailPageButton("issue_" + request.issueId); }, 1500);
-            console.log("InitializeGithubViewed", request);
-            debugger;
+            setTimeout(function() { initalizeDetailPageButton("issue_" + request.issueId); }, 1500);
         }
     });
 
 function initalizeDetailPageButton(issueId) {
-    debugger;
-    getFromStorage(function (list) {
-        var jsIssueRow = document.querySelector("#show_issue");
+    getFromStorage(function(list) {
+        var jsIssueRow = document.querySelector("#partial-discussion-header");
         if (jsIssueRow) {
             var tableObject = jsIssueRow.querySelector(".TableObject");
 
@@ -28,6 +25,7 @@ function initalizeDetailPageButton(issueId) {
         }
     });
 }
+
 function GetDetailPageButton(id, viewed) {
     var element = htmlToElement(GetTemplateHtml(id, viewed).replace("btn-github-issue-viewed-in-list", ""));
     element.children[0].dataset.IsDetailPage = true;

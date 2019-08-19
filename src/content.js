@@ -2,7 +2,7 @@ const localStorageKey = "GithubViewedIssueIds";
 rowIdSuffix = "";
 
 function initalize() {
-    getFromStorage(function (list) {
+    getFromStorage(function(list) {
         var jsIssueRows = document.querySelectorAll(".js-issue-row");
         if (jsIssueRows) {
             for (var i = 0, l = jsIssueRows.length; i < l; i++) {
@@ -98,7 +98,7 @@ function getOverlay() {
 
 function addToStorage(id) {
     id += rowIdSuffix;
-    getFromStorage(function (list) {
+    getFromStorage(function(list) {
 
         if (!list) {
             list = [];
@@ -112,7 +112,7 @@ function addToStorage(id) {
 
 function removeFromStorage(id) {
     id += rowIdSuffix;
-    getFromStorage(function (list) {
+    getFromStorage(function(list) {
 
         if (list && list.indexOf(id) != -1) {
             list.splice(list.indexOf(id), 1);
@@ -125,13 +125,13 @@ function setStorage(list) {
     var jsonfile = {};
     jsonfile[localStorageKey] = JSON.stringify(list);
 
-    chrome.storage.sync.set(jsonfile, function () {
+    chrome.storage.sync.set(jsonfile, function() {
 
     });
 }
 
 function getFromStorage(callBack) {
-    chrome.storage.sync.get([localStorageKey], function (result) {
+    chrome.storage.sync.get([localStorageKey], function(result) {
         if (typeof result[localStorageKey] != "undefined")
             callBack(JSON.parse(result[localStorageKey]));
         else
@@ -140,11 +140,11 @@ function getFromStorage(callBack) {
 }
 
 chrome.runtime.onMessage.addListener(
-    function (request, sender, sendResponse) {
+    function(request, sender, sendResponse) {
         // listen for messages sent from background.js
         if (request.message === 'UrlChanged_ReInitializeIssueViewed') {
             rowIdSuffix = request.rowIdSuffix;
-            setTimeout(function () { initalize(); }, 1500);
+            setTimeout(function() { initalize(); }, 1500);
             console.log("InitializeGithubViewed", request);
             debugger;
         } else if (request.message === "ConsoleLogMe") {
