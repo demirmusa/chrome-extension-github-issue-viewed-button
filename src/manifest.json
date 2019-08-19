@@ -11,11 +11,13 @@
     ],
     "content_scripts": [{
         "css": [
-            "styles.css"
+            "frontend/styles.css"
         ],
         "js": [
-            "content.js",
-            "detailPage.js"
+            "frontend/globalFunctions.js",
+            "frontend/dataStorage.js",
+            "frontend/content.js",
+            "frontend/detailPage.js"
         ],
         "matches": [
             "<all_urls>"
@@ -23,8 +25,8 @@
     }],
     "background": {
         "scripts": [
-            "background.js",
-            "contextMenu.js"
+            "background/background.js",
+            "background/contextMenu.js"
         ]
     }
 }

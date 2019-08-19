@@ -27,7 +27,7 @@ function initalizeDetailPageButton(issueId) {
 }
 
 function GetDetailPageButton(id, viewed) {
-    var element = htmlToElement(GetTemplateHtml(id, viewed).replace("btn-github-issue-viewed-in-list", ""));
+    var element = htmlToElement(getViewedButtonHtmlString(id, viewed).replace("btn-github-issue-viewed-in-list", ""));
     element.children[0].dataset.IsDetailPage = true;
     return element;
 }
