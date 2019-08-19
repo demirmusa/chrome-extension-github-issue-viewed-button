@@ -14,7 +14,8 @@
             "styles.css"
         ],
         "js": [
-            "content.js"
+            "content.js",
+            "detailPage.js"
         ],
         "matches": [
             "<all_urls>"

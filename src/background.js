@@ -6,9 +6,12 @@ var regexAllowedUrlWithOutProjectId = ["(https:\/\/github.com)\/[0-9a-zA-z-]+\/[
 ];
 var regexAllowedUrlWithProjectId = ["(https:\/\/github.com)\/(issues)", "(https:\/\/github.com)\/(pulls)"]; //in these pages js-issue-row id has also project name issue_2590_aspnetzero_aspnet-zero-core
 
-chrome.tabs.onCreated.addListener(function(tab) {
+var regexDetailsPage = "(https:\/\/github.com)\/[0-9a-zA-z-]+\/[0-9a-zA-z-]+\/((pulls)|(issues))/([0-9]+)";
+
+chrome.tabs.onCreated.addListener(function (tab) {
     debugger;
     runContentJs(tab.id, tab.url);
+    runDetailPageJs(tabId, tab.url);
 
     chrome.tabs.sendMessage(tab.id, {
         message: 'ConsoleLogMe',
@@ -16,10 +19,11 @@ chrome.tabs.onCreated.addListener(function(tab) {
         tab: tab
     });
 });
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     //if (changeInfo.url && changeInfo.url && tab && changeInfo.url === tab.url) {
     debugger;
     runContentJs(tabId, tab.url);
+    runDetailPageJs(tabId, tab.url);
     //}
 
     chrome.tabs.sendMessage(tabId, {
@@ -48,6 +52,9 @@ function controlUrl(url) {
             return false;
         }
     }
+    if (controlDetailPageUrl(url).isTrue) {
+        return false;
+    }
     for (let index = 0; index < regexAllowedUrlWithProjectId.length; index++) {
         var regex = new RegExp(regexAllowedUrlWithProjectId[index]);
         if (regex.exec(url)) {
@@ -73,4 +80,32 @@ function getRowIdSuffix(url) {
     var projectName = splittedList[2];
 
     rowIdSuffix = "_" + accountName + "_" + projectName;
+}
+
+function runDetailPageJs(tabId, url) {
+    var control = controlDetailPageUrl(url);
+
+    if (control.isTrue) {
+        chrome.tabs.sendMessage(tabId, {
+            message: 'UrlChanged_ReInitializeIssueViewed_DetailPage',
+            rowIdSuffix: rowIdSuffix,
+            issueId: control.issueId
+        });
+    }
+}
+function controlDetailPageUrl(url) {
+    debugger;
+    var regex = new RegExp(regexDetailsPage);
+    var regexResult = regex.exec(url);
+    if (regexResult) {
+        getRowIdSuffix(url);
+        return {
+            isTrue: true,
+            issueId: regexResult[5]
+        };
+    }
+
+    return {
+        isTrue: false
+    };
 }
