@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Github Issue/PR Viewed Button",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "description": "It adds viewed button to issue and pull request pages on github",
     "permissions": [
         "tabs",
@@ -28,5 +28,8 @@
             "background/background.js",
             "background/contextMenu.js"
         ]
-    }
+    },
+    "icons": { "16": "icon.png",
+        "48": "icon.png",
+       "128": "icon.png" }
 }
