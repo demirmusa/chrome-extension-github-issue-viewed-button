@@ -6,7 +6,6 @@
     "permissions": [
         "tabs",
         "storage",
-        "<all_urls>",
         "contextMenus"
     ],
     "content_scripts": [{
@@ -20,7 +19,7 @@
             "frontend/detailPage.js"
         ],
         "matches": [
-            "<all_urls>"
+            "https://github.com/*"
         ]
     }],
     "background": {
