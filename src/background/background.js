@@ -1,6 +1,6 @@
 var regexDefaultPages = "(https:\/\/github.com)\/((issues)|(pulls))"; //in these pages js-issue-row id has also project name (example: issue_1_accountName_projectName)
 var regexListPages = ["(https:\/\/github.com)\/([0-9a-zA-z-]+)\/([0-9a-zA-z-]+)\/((pulls)|(issues))",
-    "(https:\/\/github.com)\/([0-9a-zA-z-]+)\/([0-9a-zA-z-]+)\/(milestone)\/([0-9]+)"]; //in these pages js-issue-row id dont only has id value (example: issue_2590)
+    "(https:\/\/github.com)\/([0-9a-zA-z-]+)\/([0-9a-zA-z-]+)\/(milestone)\/([0-9]+)"]; //in these pages js-issue-row id only has id value (example: issue_2590)
 
 var regexDetailsPages = "(https:\/\/github.com)\/([0-9a-zA-z-]+)\/([0-9a-zA-z-]+)\/((pull)|(issues))\/([0-9]+)";
 
