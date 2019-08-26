@@ -2,7 +2,7 @@ const localStorageKey = "GithubViewedIssueIds";
 
 var contextMenu = {
     id: "clearAllViewedIds",
-    title: "Github Issue Clear All Vieweds"
+    title: "Clear All Selection"
 }
 chrome.contextMenus.create(contextMenu);
 

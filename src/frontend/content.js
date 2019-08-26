@@ -21,7 +21,7 @@ function initalizeListPageButtons() {
                 var table = jsIssueRows[i].querySelector(".d-table");
 
                 if (list && list.indexOf(id + rowIdSuffix) != -1) { //if its viewed
-                    addOverlayElement(table);
+                    addOverlayElement(table);                   
                     table.appendChild(htmlToElement(getViewedButtonHtmlString(id, true)))
                 } else {
                     table.appendChild(htmlToElement(getViewedButtonHtmlString(id, false)))
@@ -33,7 +33,8 @@ function initalizeListPageButtons() {
 }
 
 function addOverlayElement(tableElement) {
-    tableElement.insertBefore(htmlToElement(getOverlayHtmlString()), tableElement.childNodes[0]);
+    //tableElement.insertBefore(htmlToElement(getOverlayHtmlString()), tableElement.childNodes[0]);
+    tableElement.appendChild(htmlToElement(getOverlayHtmlString()));
 }
 
 function getOverlayHtmlString() {
