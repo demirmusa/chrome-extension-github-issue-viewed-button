@@ -2,14 +2,13 @@ const localStorageKey = "GithubViewedIssueIds";
 
 var contextMenu = {
     id: "clearAllViewedIds",
-    title: "Clear All Selection"
+    title: "Remove all viewed marks."
 }
+
 chrome.contextMenus.create(contextMenu);
 
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
-    debugger;
     if (info.menuItemId == contextMenu.id) {
-
         var jsonfile = {};
         jsonfile[localStorageKey] = JSON.stringify([]);
 

@@ -17,7 +17,6 @@ function Initialize(tab) {
         var detailInfo = getDetailIssueIdAndSuffix(tab.url);
         triggerDetailPageInitializeEvent(tab.id, detailInfo.suffix, detailInfo.issueId);
     } else {
-        debugger;
         var isListPage = IsListPage(tab.url);
         var isDefaultPage = IsDefaultPage(tab.url);
         if (isListPage || isDefaultPage) {
@@ -85,7 +84,6 @@ function getListPageSuffix(url) {
         var regex = new RegExp(regexListPage);
         var regexResult = regex.exec(url);
         if (regexResult) {
-            debugger;
             var accountName = regexResult[2];
             var projectName = regexResult[3];
             suffix = "_" + accountName + "_" + projectName;
