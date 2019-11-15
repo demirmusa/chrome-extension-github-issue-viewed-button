@@ -17,3 +17,7 @@
     top: 0;
     pointer-events: none;
 }
+
+.overlay-row-github-issue-viewed:hover {
+    background-color: #f5f5f57d;
+}
