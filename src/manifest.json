@@ -1,8 +1,8 @@
 {
     "manifest_version": 2,
-    "name": "Github Viewed+",
+    "name": "Github Viewed",
     "version": "1.1.1",
-    "description": "It adds viewed button to issue and pull request pages on github. You can select issue/pr as a viewed and add overlay to row.",
+    "description": "It adds viewed button to issue,pull request, milestone... pages on github. You can select issue/pr as a viewed and add overlay to row.",
     "permissions": [
         "tabs",
         "storage",
