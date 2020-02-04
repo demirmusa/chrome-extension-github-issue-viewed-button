@@ -1,16 +1,16 @@
 rowIdSuffix = "";
 
 chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
+    function (request, sender, sendResponse) {
         // listen for messages sent from background.js
         if (request.message === 'UrlChanged_ReInitializeIssueViewed') {
             rowIdSuffix = request.rowIdSuffix;
-            setTimeout(function() { initalizeListPageButtons(); }, 1500);
+            setTimeout(function () { initalizeListPageButtons(); }, 1500);
         }
     });
 
 function initalizeListPageButtons() {
-    getFromStorage(function(list) {
+    getFromStorage(function (list) {
         var jsIssueRows = document.querySelectorAll(".js-issue-row"); //get all rows
         if (jsIssueRows) {
             for (var i = 0, l = jsIssueRows.length; i < l; i++) {
@@ -18,13 +18,13 @@ function initalizeListPageButtons() {
                 if (btn) continue; //check if its already added
 
                 var id = jsIssueRows[i].id; //id wil be like issue_{issue/pr Id}
-                var table = jsIssueRows[i].querySelector(".d-table");
+                var flex = jsIssueRows[i].querySelector(".d-flex");
 
                 if (list && list.indexOf(id + rowIdSuffix) != -1) { //if its viewed
-                    addOverlayElement(table);                   
-                    table.appendChild(htmlToElement(getViewedButtonHtmlString(id, true)))
+                    addOverlayElement(flex);
+                    flex.appendChild(htmlToElement(getViewedButtonHtmlString(id, true)))
                 } else {
-                    table.appendChild(htmlToElement(getViewedButtonHtmlString(id, false)))
+                    flex.appendChild(htmlToElement(getViewedButtonHtmlString(id, false)))
                 }
             }
             bindOnChangeEvents();
@@ -32,9 +32,9 @@ function initalizeListPageButtons() {
     });
 }
 
-function addOverlayElement(tableElement) {
-    //tableElement.insertBefore(htmlToElement(getOverlayHtmlString()), tableElement.childNodes[0]);
-    tableElement.appendChild(htmlToElement(getOverlayHtmlString()));
+function addOverlayElement(flexElement) {
+    //flexElement.insertBefore(htmlToElement(getOverlayHtmlString()), flexElement.childNodes[0]);
+    flexElement.appendChild(htmlToElement(getOverlayHtmlString()));
 }
 
 function getOverlayHtmlString() {
@@ -54,19 +54,19 @@ function issueViewedCheckboxOnChange(e) {
     if (!e.target.dataset.IsDetailPage) { //if its list page add overlays
         var boxRow = document.getElementById(id);
         if (boxRow) {
-            var table = boxRow.querySelector(".d-table");
-            if (table) {
+            var flex = boxRow.querySelector(".d-flex");
+            if (flex) {
                 if (e.target.checked) {
                     e.target.parentNode.classList.add("bg-blue-2");
                     addToStorage(id);
-                    addOverlayElement(table);
+                    addOverlayElement(flex);
                 } else {
                     e.target.parentNode.classList.remove("bg-blue-2");
 
-                    var overlayDivs = table.querySelectorAll(".overlay-row-github-issue-viewed"); //delete all overlays
+                    var overlayDivs = flex.querySelectorAll(".overlay-row-github-issue-viewed"); //delete all overlays
                     if (overlayDivs && overlayDivs.length > 0) {
                         overlayDivs.forEach(overlayDiv => {
-                            table.removeChild(overlayDiv);
+                            flex.removeChild(overlayDiv);
                         });
                     }
                     removeFromStorage(id);
